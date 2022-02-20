@@ -1179,7 +1179,7 @@ ggplotly(g1) %>%
 
 ### Principais Destinos da Uva Exportada em Janeiro de 2022 {.no-title}
 
-```{r exporta15 , fig.width=7, fig.height=4, fig.align='center'}
+```{r exporta15, fig.width=7, fig.height=4, fig.align='center'}
 
 #Gráfico com Ggplot2
 
@@ -1244,7 +1244,7 @@ Row
 
 ### Volume das Exportações de Uva do Brasil: Janeiro de 2022 em comparação com as informações entre 2016-2021 {.no-title}
 
-```{r exporta9}
+```{r exporta9, fig.width=10, fig.height=4, fig.align='center'}
 g7 <- ggplot()+
   geom_col(data=tableb2_vol, aes(x=Meses, y=value, fill=variable), lwd=1,
            position = "dodge")+
