@@ -713,7 +713,7 @@ Fonte: Observatório de Mercado de uva da Embrapa
 <br>
 <br>
 
-# 5. Principais destinos de exportação da uva do Brasil: Janeiro de 2022. {.tabset .tabset-fade}
+# 4. Principais destinos de exportação da uva do Brasil: Janeiro de 2022. {.tabset .tabset-fade}
 
 <br>
 <br>
@@ -771,7 +771,7 @@ Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
 <br>
 <br>
 
-# 6. Principais vias de exportação da uva do Brasil: Janeiro de 2022. {.tabset .tabset-fade}
+# 5. Principais vias de exportação da uva do Brasil: Janeiro de 2022. {.tabset .tabset-fade}
 
 <br>
 <br>
@@ -827,7 +827,7 @@ Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
 <br>
 <br>
 
-# 7. Unidade da Federação da uva exportada do Brasil: Janeiro de 2022. {.tabset .tabset-fade}
+# 6. Unidade da Federação da uva exportada do Brasil: Janeiro de 2022. {.tabset .tabset-fade}
 
 <br>
 <br>
@@ -883,7 +883,7 @@ Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
 <br>
 <br>
 
-# 8. Importação de Uva pelo Brasil: 2016-2022. {.tabset .tabset-fade}
+# 7. Importação de Uva pelo Brasil: 2016-2022. {.tabset .tabset-fade}
 
 <br>
 <br>
@@ -942,7 +942,7 @@ Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
 
 <br>
 
-# 9. Evolução da Taxa de Câmbio Esperada para Dezembro de 2022 {.tabset .tabset-fade}
+# 8. Evolução da Taxa de Câmbio Esperada para Dezembro de 2022 {.tabset .tabset-fade}
 
 <br>
 <br>
