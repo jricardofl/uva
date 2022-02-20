@@ -926,6 +926,34 @@ datatable(cambiot, option = list(
 ```
 Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
 
+<br>
+<br>
+
+# INFORMAÇÕES
+<br>
+<br>
+
+<center>![](logo_uva.jpg){width=16cm}</center>
+
+<br>
+<br>
+
+<center> João Ricardo F. de Lima </center>
+<center> Email: joao.ricardo@embrapa.br </center>
+
+<br>
+
+<center> [https://www.embrapa.br/observatorio-da-uva](https://www.embrapa.br/observatorio-da-uva) </center>
+
+<br>
+
+<center> Telefones: </center>
+<br>
+
+<center> 87-3866-3667 </center> 
+<center> 87-99961-5799 </center>
+
+<center>![](logo_embrapa.jpg){width=6cm}</center>
 
 <br>
 <br>
