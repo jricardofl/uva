@@ -95,6 +95,19 @@ colnames(dados4) = c('Vias', "Participacao")
 dados5 <- read.csv2('uf_2022.csv', header=T, sep=";" , dec = ".")
 colnames(dados5) = c('UF', "Participacao")
 
+#Cambio Baixando os dados para o R
+dados6 <- get_market_expectations("monthly", "Câmbio", start_date = "2022-01-01")
+dados6 <- dados6 %>% filter (baseCalculo == 0) 
+dates <- dados6$Data[dados6$DataReferencia=='12/2022']
+cambio_esperado <- dados6$Media[dados6$DataReferencia=='12/2022']
+cambio_esperado <- round(cambio_esperado,2)
+dados6 <- data.frame(dates=dates, cambio=cambio_esperado)
+
+# Entrando dados no R
+dados7 <- read.csv2('importacao.csv', header=T, sep=";" , dec = ".")
+dados7 <- dados7[,-c(1,2)]
+colnames(dados7) = c('Chile', 'Argentina', 'Peru')
+
 #Ajusta para Valor
 #Analise de Serie Temporal
 exporta_uva_valor <- dados2[,3]
@@ -243,14 +256,9 @@ variacaom <- melt(variacao, id.var='Meses')
 
 mycolors2 <- c("orange", "lightblue3")
 
-#Cambio
-
-dados6 <- get_market_expectations("monthly", "Câmbio", start_date = "2022-01-01")
-dados6 <- dados6 %>% filter (baseCalculo == 0) 
-dates <- dados6$Data[dados6$DataReferencia=='12/2022']
-cambio_esperado <- dados6$Media[dados6$DataReferencia=='12/2022']
-cambio_esperado <- round(cambio_esperado,2)
-dados6 <- data.frame(dates=dates, cambio=cambio_esperado)
+#Dados de Importação
+importacao <- tibble(date, dados7)
+importacao <- melt(importacao, id.var='date')
 ```
 
 <br>
@@ -266,6 +274,8 @@ Em relação aos volumes, em `r strftime(atual, format = "%B")` foram de 1,12 mi
 Em termos dos valores da exportações, em `r strftime(atual, format = "%B")` foram cerca de 2,396 milhões de dólares (US\$). A média histórica (até 2019, antes da pandemia) para este mês é de US\$ 2,398 milhões. Em `r strftime(atual, format = "%B")` de 2020 foram gerados US\$ 2,139 milhões em receitas e, em `r strftime(atual, format = "%B")` de 2021, um total de US\$ 2,339 milhões, ou seja, os valores são praticamente os mesmos da média e das exportações de anos anteriores.
 
 Devido os preços menores de mercado interno e os altos custos de produção, os produtores priorizam as vendas externas, que são mais lucrativas, mesmo com a taxa de câmbio com o dólar se desvalorizando nas últimas semanas. 
+
+Os principais destinos foram Holanda (43,59%), Estados Unidos (36,92%) e Reino Unido (15,92%). A principal via de envio foi a maritima (96,8%) e os principais estados de origem da uva foram Pernambuco (49,52%) e Bahia (46,7%). Em janeiro, cerca de 65 toneladas de uva foram importadas da Argentina.
 
 <br>
 <br>
@@ -873,7 +883,66 @@ Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
 <br>
 <br>
 
-# 8. Evolução da Taxa de Câmbio Esperada para Dezembro de 2022 {.tabset .tabset-fade}
+# 8. Importação de Uva pelo Brasil: 2016-2022. {.tabset .tabset-fade}
+
+<br>
+<br>
+
+## GRÁFICO
+
+``` {r importa1}
+mycolors3 <- c("orange", "lightblue3", "red")
+
+g13 <- ggplot()+
+geom_col(data=importacao, aes(x=date, y=value, fill=variable), lwd=1, position = "dodge")+
+  scale_fill_manual(values=mycolors3)+
+    scale_x_date(date_breaks = "6 months",
+               labels = date_format("%b-%y"))+
+  labs(y= "Volume (Toneladas)", x= "Meses do Ano", title='',
+       caption = "Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de Uva da Embrapa")+
+  theme_minimal()+
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=11, margin = margin(b=20)),
+        axis.text.y=element_text(hjust=0.5, size=10, margin = margin(l=20)),
+        axis.title.y = element_text(size=10, face = "bold"),
+        axis.title.x = element_text(size=10, face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.caption = element_text(hjust = 0, size=14),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=10)) # Definindo posição da legenda
+
+ggplotly(g13) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.35, 
+                      y=-0.2,
+                      title=''))
+```
+
+## TABELA
+
+**VISUALIZAÇÃO DOS DADOS EM TABELA**
+<br>
+
+```{r importa2}
+importacaot <- dados7
+importacaot$date <- date
+data_importacaot <-format(as.Date(importacaot$date),'%m/%Y')
+importacaot <- tibble(data_importacaot, importacaot)
+importacaot <- importacaot[,-5]
+colnames(importacaot)[1] = 'Data'
+
+datatable(importacaot, option = list(
+  autoWidth = TRUE,
+  pageLength = 12,
+  lengthMenu = c(12, 24, 48, 96),
+  columnDefs = list(list(className = 'dt-center', targets = "_all"))))
+```
+Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
+
+<br>
+
+# 9. Evolução da Taxa de Câmbio Esperada para Dezembro de 2022 {.tabset .tabset-fade}
 
 <br>
 <br>
@@ -882,7 +951,7 @@ Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
 
 ```{r exporta21}
 
-g13 <- ggplot(data=dados6)+
+g14 <- ggplot(data=dados6)+
   geom_line(aes(x=dates, y=cambio), color="blue", size=1.5)+
     scale_x_date(date_breaks = "1 week",
                labels = date_format("%d-%b"))+
@@ -899,7 +968,7 @@ g13 <- ggplot(data=dados6)+
         legend.position = "bottom", legend.title = element_blank(),
         legend.text=element_text(size=12)) # Definindo posição da legenda
 
-ggplotly(g13)
+ggplotly(g14)
 ```
 Fonte: FOCUS/BCB reprocessado pelo Observatório de Mercado de uva da Embrapa
 
