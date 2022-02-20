@@ -43,13 +43,13 @@ sem_ano <- 7 #ajustar semanalmente
 
 Os dados utilizados nesta análise são semanais e disponibilizados pelo **CEPEA (Esalq-USP)** englobando o período de 2017 a 2022, para uva sem semente branca e negra embaladas (incluso uva+material de embalagem+resfriamento, FOB-Petrolina), para os produtores do Vale do São Francisco. Também mostra informações sobre a uva negra sem embalagem, com dados semanais de 2019 à 2021. Os preços até a semana `r strftime(today, format = "%V de %Y")`, deflacionados pelo IGP-DI, são comparados com a média de cada semana entre 2017 e 2019 (pré pandemia), mínimo e máximo. Os preços deflacionados de 2020 e de 2021 também são apresentados para comparação de 2022 com os dois anos anteriores.
 
-O preço médio de uva sem semente branca embalada, na semana `r strftime(today, format = "%V")`, foi R\$14,01, variando entre R\$14,80 e R\$13,50. A média nesta semana é menor que a média histórica semanal deflacionada (R\$13,69), mas superou o valor deflacionado de 2020 (R\$ 11,47) e o valor de 2021 (R\$ 12,39). Em relação a semana `r strftime(last, format = "%V")` houve uma aumento, de 9,80%.
+O preço médio de uva sem semente branca embalada, na semana 07, foi R\$ 13,35, variando entre R\$15,60 e R\$ 11,00. A média nesta semana é a mesma que a média histórica semanal deflacionada (R\$ 13,36), mas superou o valor deflacionado de 2020 (R\$ 11,62) e o valor de 2021 (R\$ 12,64). Em relação a semana 06 houve uma queda, de -4,71%.
 
-No caso da uva sem semente negra embalada (embalagem do produtor + resfriamento), na semana `r strftime(today, format = "%V")` o preço médio foi de R\$11,21, variando entre R\$12,00 e R\$10,40. Em 2020, o preço deflacionado é de R\$ 10,50. Em 2021 o preço é de R\$ 11,13 e a média histórica deflacionada para esta semana é de R\$ 13,31. Em relação à semana `r strftime(last, format = "%V")`, os preços cairam um pouco (-1,67%). Assim, o ano de 2022 começa com melhores preços do que os dois anteriores.
+No caso da uva sem semente negra embalada (embalagem do produtor + resfriamento), na semana 07 o preço médio foi de R\ $11,87, variando entre R\$ 13,00 e R\$ 10,00. Em 2020, o preço deflacionado é de R\$ 10,26. Em 2021 o preço é de R\$ 11,50 e a média histórica deflacionada para esta semana é de R\$ 14,30. Em relação à semana 06, os preços aumentaram (5,89%). Assim, o ano de 2022 começa com melhores preços do que os dois anteriores.
 
-Para a uva sem semente negra, o preço na semana `r strftime(today, format = "%V")` aumentou fortemente em relação a semana anterior (15,24%), na média de R\$6,88, variando entre R\$7,00 e R\$6,50. Este valor é menor do que o de 2020 deflacionado (R\$6,94), menor do que a média histórica deflacionada da semana (R\$8,03), mas é maior do que o valor de 2021 (R\$6,01). 
+Para a uva sem semente negra, o preço na semana 07 aumentou em relação a semana anterior (2,18%), na média de R\$ 7,03, variando entre R\$ 7,30 e R\$ 6,70. Este valor é maior do que o de 2020 deflacionado (R\$ 6,84), maior do que o valor de 2021 (R\$ 5,98), mas menor do que a média histórica deflacionada da semana (R\$ 8,05).
 
-A oferta reduzida devido as chuvas neste ano contribuem para o comportamento dos preços mais altos. 
+A oferta reduzida devido as chuvas que ocorrem neste ano e a priorização dada para exportação, contribuem para o comportamento dos preços mais altos neste inicio de ano.
 
 <br>
 
