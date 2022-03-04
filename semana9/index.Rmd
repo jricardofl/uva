@@ -51,7 +51,7 @@ No caso da uva sem semente negra embalada (embalagem do produtor + resfriamento)
 
 Para a uva sem semente negra, o preço na semana `r strftime(today, format = "%V")` reduziu em relação a semana anterior (-1,17%), na média de R\$ 7,59, variando entre R\$ 8,20 e R\$ 6,60. Este valor é maior do que o de 2020 deflacionado (R\$ 7,18), maior do que o valor de 2021 (R\$ 5,72), mas menor do que a média histórica deflacionada da semana (R\$ 8,25).
 
-A tendência histórica para as uvas é de alta. Pela sazonalidade, contudo, os preços podem ter redução nas próximas semanas. Contudo, como as chuvas continuam ocorrendo na região do Vale do São Francisco, impactando a cultura da videira, a oferta pode ficar ainda mais comprometida e os preços reagirem positivamente.
+A tendência histórica para as uvas é de alta. Pela sazonalidade, contudo, os preços podem ter redução nas próximas semanas. Como as chuvas continuam ocorrendo na região do Vale do São Francisco, impactando a cultura da videira, a oferta pode ficar ainda mais comprometida e os preços reagirem positivamente.
 
 <br>
 
