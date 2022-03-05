@@ -12,7 +12,7 @@ output:
       version: 4
       bootswatch: bootstrap
       navbar-bg: "#183b8c"
-      bg:        "#ffffff"
+      bg:        "#183b8c"
       fg:        "#ffffff"
 #runtime: shiny
 ---
@@ -45,6 +45,10 @@ library(lubridate)
 library(rmarkdown)
 library(bslib)
 library(shiny)
+library(magrittr)# pipe operations
+library(readxl)
+
+checkX13()
 
 knitr::opts_chunk$set(
   echo       = FALSE,
@@ -57,11 +61,181 @@ knitr::opts_chunk$set(
 library(lubridate)
 anterior <- as.Date("2021-12-01")
 atual <-  as.Date("2022-01-01")
-data <- as.Date("2022-02-25")
-sem_ano <- 8 #ajustar semanalmente
+data <- as.Date("2022-03-04")
+sem_ano <- 9 #ajustar semanalmente
 # Linhas que precisam de ajuste: 71, 104, 107
 ```
 
+DADOS GERAIS
+======================================================================
+
+======================================================================
+```{r database5}
+#Direcionado o R para o Diretorio a ser trabalhado
+setwd('c:/Users/Joao Ricardo Lima/Dropbox/tempecon/dados_uva')
+
+options(digits=4)
+today <- as.Date("2022-01-01")
+date <- seq(as.Date('2021-01-01'),to=as.Date('2021-12-01'),by='1 month')
+
+#Entrando dados no R
+dados <- read_excel("uva_ibge2020.xlsx", col_names = TRUE)
+dados$produtividade <- round(dados$produtividade,0)
+
+#Cores para os gráficos
+
+mycolor1 <- "gold"
+mycolor2 <- "darkgreen"
+mycolor3 <- "blue"
+mycolor4 <- "red"
+```
+
+Row {data-height=150}
+-----------------------------------------------------------------------
+
+### Área Plantada com Uva no Brasil em 2020 
+``` {r}
+num <- 28.261 
+valueBox(
+  value = paste0(num, " Hectares"),
+#  color = "lightblue3",
+  icon= "fa-pen")
+```
+
+### Produtividade média da Uva no Brasil em 2020 
+``` {r}
+num <- 25
+valueBox(
+  value = paste0( num, " Toneladas/Hectare"),
+#  color = "lightblue3",
+  icon= "fa-pen")
+```
+
+### Volume com Uva produzida no Brasil em 2020 
+``` {r}
+num <- 700.2
+valueBox(
+  value = paste0(format(num, decimal.mark =  ","), " Mil Toneladas" ),
+#  color = "lightblue3",
+  icon= "fa-pen")
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Evolução da Area com uva no Vale do São Francisco: 2016:2020 {.no-title}
+
+```{r ibge1}
+g1 <- ggplot(data=dados) +  #estetica vai valer para todos os geom's
+  geom_col(aes(x=ano, y=area, fill="Area uva (Hectares)"), lwd=1)+
+  scale_fill_manual(values=mycolor1)+
+  labs(y= "Hectares", x= "Anos", title='Evolução da Area com Uva no Vale do São Francisco: 2016-2020',
+       caption = "Fonte: IBGE (2021)") +
+  scale_y_continuous(limits=c(0, 12000), n.breaks = 10, expand = expansion(add=c(0,0.5)))+
+  theme_classic()+ #Definindo tema
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=12, margin = margin(b=5)),
+        axis.text.y=element_text(hjust=1, size=12, margin = margin(l=20)),
+        axis.title.x = element_text(size=12, face = "bold", margin = margin(b=0)),
+        axis.title.y = element_text(size=12, face = "bold", margin = margin(l=20)),
+        plot.title = element_text(hjust = 0.5, size=14),
+        plot.caption = element_text(hjust = 0, size=8),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+
+ggplotly(g1) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.35, 
+                      y=-0.3,
+                      title=''))
+```
+
+### Evolução do Volume com uva no Vale do São Francisco: 2016-2020 {.no-title}
+
+```{r ibge2}
+g2 <- ggplot(data=dados) +  #estetica vai valer para todos os geom's
+  geom_col(aes(x=ano, y=quantidade/1000, fill="Volume (Mil Toneladas)"), lwd=1)+
+  scale_fill_manual(values=mycolor2)+
+  labs(y= "Mil Toneladas", x= "Anos", title='Evolução do Volume com uva no Vale do São Francisco: 2016-2020',
+       caption = "Fonte: IBGE (2021)") +
+  scale_y_continuous(limits=c(0, 600), n.breaks = 6, expand = expansion(add=c(0,0.5)))+
+  theme_classic()+ #Definindo tema
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=12, margin = margin(b=5)),
+        axis.text.y=element_text(hjust=1, size=12, margin = margin(l=20)),
+        axis.title.x = element_text(size=12, face = "bold", margin = margin(b=0)),
+        axis.title.y = element_text(size=12, face = "bold", margin = margin(l=20)),
+        plot.title = element_text(hjust = 0.5, size=14),
+        plot.caption = element_text(hjust = 0, size=8),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+
+ggplotly(g2) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.35, 
+                      y=-0.3,
+                      title=''))
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Evolução da Produtividade com uva no Vale do São Francisco: 2016-2020 {.no-title}
+
+```{r ibge3}
+g3 <- ggplot(data=dados) +  #estetica vai valer para todos os geom's
+  geom_col(aes(x=ano, y=produtividade, fill="Produtividade (Toneladas/Hectares)"), lwd=1)+
+  scale_fill_manual(values=mycolor3)+
+  labs(y= "Produtividade (Ton/Ha)", x= "Anos", title='Evolução da Produtividade com uva no Vale do São Francisco: 2016-2020',
+       caption = "IBGE (2021)") +
+  scale_y_continuous(limits=c(0, 60), n.breaks = 6, expand = expansion(add=c(0,0.5)))+
+  theme_classic()+ #Definindo tema
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=12, margin = margin(b=5)),
+        axis.text.y=element_text(hjust=1, size=12, margin = margin(l=20)),
+        axis.title.x = element_text(size=12, face = "bold", margin = margin(b=0)),
+        axis.title.y = element_text(size=12, face = "bold", margin = margin(l=20)),
+        plot.title = element_text(hjust = 0.5, size=14),
+        plot.caption = element_text(hjust = 0, size=8),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+
+ggplotly(g3) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.35, 
+                      y=-0.3,
+                      title=''))
+```
+
+### Evolução do Valor Bruto da Produção com uva no Vale do São Francisco: 2016-2020  {.no-title}
+
+```{r ibge4}
+g4 <- ggplot(data=dados) +  #estetica vai valer para todos os geom's
+  geom_col(aes(x=ano, y=vbp/1000, fill="Valor Bruto Produção (Mil R$)"), lwd=1)+
+  scale_fill_manual(values=mycolor4)+
+  labs(y= "VBP (Mil R$)", x= "Anos", title='Evolução do Valor Bruto da Produção com uva no Vale do São Francisco: 2016-2020',
+       caption = "IBGE (2021)") +
+  scale_y_continuous(limits=c(0, 1600), n.breaks = 5, expand = expansion(add=c(0,0.5)))+
+  theme_classic()+ #Definindo tema
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=12, margin = margin(b=5)),
+        axis.text.y=element_text(hjust=1, size=12, margin = margin(l=20)),
+        axis.title.x = element_text(size=12, face = "bold", margin = margin(b=0)),
+        axis.title.y = element_text(size=12, face = "bold", margin = margin(l=20)),
+        plot.title = element_text(hjust = 0.5, size=14),
+        plot.caption = element_text(hjust = 0, size=8),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+
+ggplotly(g4) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.35, 
+                      y=-0.3,
+                      title=''))
+```
+
+BRANCA SEEDLESS EMBALADA {data-navmenu="PREÇOS AO PRODUTOR"}
+======================================================================
 
 ``` {r database1}
 #Direcionado o R para o Diretorio a ser trabalhado
@@ -223,9 +397,6 @@ mycolors2 <- c("orange", "lightblue3")
 # Customizar tema interativamente em tempo real (ver mensagens no console)
 #bslib::bs_themer()
 ```
-
-BRANCA EMBALADA
-======================================================================
 
 Row {data-height=150}
 -----------------------------------------------------------------------
@@ -405,7 +576,7 @@ ggplotly(g4) %>%
                       title=''))
 ```
 
-NEGRA EMBALADA
+NEGRA SEEDLESS EMBALADA {data-navmenu="PREÇOS AO PRODUTOR"}
 ======================================================================
 
 Row {data-height=150}
@@ -646,7 +817,7 @@ ggplotly(g8) %>%
                       title=''))
 ```
 
-NEGRA
+NEGRA SEEDLESS {data-navmenu="PREÇOS AO PRODUTOR"}
 ======================================================================
 
 Row {data-height=150}
@@ -1209,7 +1380,7 @@ ggplotly(g10) %>%
                       title=''))
 ```
 
-### Principais vias de exportação da Manga do Brasil: Janeiro de 2022. {.no-title}
+### Principais vias de exportação da uva do Brasil: Janeiro de 2022. {.no-title}
 
 ```{r exporta17}
 
