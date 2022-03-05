@@ -131,7 +131,7 @@ g1 <- ggplot(data=dados) +  #estetica vai valer para todos os geom's
   scale_fill_manual(values=mycolor1)+
   labs(y= "Hectares", x= "Anos", title='Evolução da Area com Uva no Vale do São Francisco: 2016-2020',
        caption = "Fonte: IBGE (2021)") +
-  scale_y_continuous(limits=c(0, 12000), n.breaks = 10, expand = expansion(add=c(0,0.5)))+
+  scale_y_continuous(limits=c(0, 12000), n.breaks = 6, expand = expansion(add=c(0,0.5)))+
   theme_classic()+ #Definindo tema
   theme(axis.text.x=element_text(angle=0, hjust=0.5, size=12, margin = margin(b=5)),
         axis.text.y=element_text(hjust=1, size=12, margin = margin(l=20)),
@@ -146,7 +146,7 @@ ggplotly(g1) %>%
   layout(legend = list(
                       orientation = "h", 
                       x=0.35, 
-                      y=-0.3,
+                      y=-0.40,
                       title=''))
 ```
 
@@ -156,7 +156,7 @@ ggplotly(g1) %>%
 g2 <- ggplot(data=dados) +  #estetica vai valer para todos os geom's
   geom_col(aes(x=ano, y=quantidade/1000, fill="Volume (Mil Toneladas)"), lwd=1)+
   scale_fill_manual(values=mycolor2)+
-  labs(y= "Mil Toneladas", x= "Anos", title='Evolução do Volume com uva no Vale do São Francisco: 2016-2020',
+  labs(y= "Mil Toneladas", x= "Anos", title='Evolução do Volume de Uva no Vale do São Francisco: 2016-2020',
        caption = "Fonte: IBGE (2021)") +
   scale_y_continuous(limits=c(0, 600), n.breaks = 6, expand = expansion(add=c(0,0.5)))+
   theme_classic()+ #Definindo tema
@@ -173,7 +173,7 @@ ggplotly(g2) %>%
   layout(legend = list(
                       orientation = "h", 
                       x=0.35, 
-                      y=-0.3,
+                      y=-0.40,
                       title=''))
 ```
 
@@ -186,7 +186,7 @@ Row
 g3 <- ggplot(data=dados) +  #estetica vai valer para todos os geom's
   geom_col(aes(x=ano, y=produtividade, fill="Produtividade (Toneladas/Hectares)"), lwd=1)+
   scale_fill_manual(values=mycolor3)+
-  labs(y= "Produtividade (Ton/Ha)", x= "Anos", title='Evolução da Produtividade com uva no Vale do São Francisco: 2016-2020',
+  labs(y= "Produtividade (Ton/Ha)", x= "Anos", title='Evolução da Produtividade da Uva no Vale do São Francisco: 2016-2020',
        caption = "IBGE (2021)") +
   scale_y_continuous(limits=c(0, 60), n.breaks = 6, expand = expansion(add=c(0,0.5)))+
   theme_classic()+ #Definindo tema
@@ -203,7 +203,7 @@ ggplotly(g3) %>%
   layout(legend = list(
                       orientation = "h", 
                       x=0.35, 
-                      y=-0.3,
+                      y=-0.40,
                       title=''))
 ```
 
@@ -213,7 +213,7 @@ ggplotly(g3) %>%
 g4 <- ggplot(data=dados) +  #estetica vai valer para todos os geom's
   geom_col(aes(x=ano, y=vbp/1000, fill="Valor Bruto Produção (Mil R$)"), lwd=1)+
   scale_fill_manual(values=mycolor4)+
-  labs(y= "VBP (Mil R$)", x= "Anos", title='Evolução do Valor Bruto da Produção com uva no Vale do São Francisco: 2016-2020',
+  labs(y= "VBP (Mil R$)", x= "Anos", title='Evolução do Valor Bruto da Produção da Uva no Vale do São Francisco: 2016-2020',
        caption = "IBGE (2021)") +
   scale_y_continuous(limits=c(0, 1600), n.breaks = 5, expand = expansion(add=c(0,0.5)))+
   theme_classic()+ #Definindo tema
@@ -230,7 +230,7 @@ ggplotly(g4) %>%
   layout(legend = list(
                       orientation = "h", 
                       x=0.35, 
-                      y=-0.3,
+                      y=-0.40,
                       title=''))
 ```
 
