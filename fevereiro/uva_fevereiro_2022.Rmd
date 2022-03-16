@@ -275,7 +275,7 @@ Em termos dos valores da exportações, em `r strftime(atual, format = "%B")` fo
 
 Os preços no mercado interno melhoraram nas últimas semanas, devido a baixa oferta de uva no Vale do São Francisco e a redução da qualidade devido às questões climáticas. Como o dólar está se desvalorizando, tem compensado a priorização das vendas no mercado interno. 
 
-Os principais destinos nos primeiros dois meses foram Estados Unidos (38,58\%), Holanda (35,87\%) e Reino Unido (13,40%). A principal via de envio foi a maritima (96,5%) e os principais estados de origem da uva foram Pernambuco (55,02%) e Bahia (40,90%). Em fevereiro, cerca de 663 t de uva foram importadas do Chile e da Argentina. Em feveireiro de 2021, o volume havia sido de 917,6 t, ou seja, uma queda de 27,74\%. 
+Os principais destinos nos primeiros dois meses foram Estados Unidos (38,58\%), Holanda (35,87\%) e Reino Unido (13,40%). A principal via de envio foi a maritima (96,5%) e os principais estados de origem da uva foram Pernambuco (55,02%) e Bahia (40,90%). Em fevereiro, cerca de 663 t de uva foram importadas do Chile e da Argentina. Em fevereiro de 2021, o volume havia sido de 917,6 t, ou seja, uma queda de 27,74\%. 
 
 <br>
 
