@@ -267,7 +267,7 @@ importacao <- melt(importacao, id.var='date')
 
 <br>
 
-O objetivo desta análise foi verificar o comportamento das exportações de uva do Brasil em janeiro de 2022. Os dados utilizados são mensais e disponibilizados pelo **Comexstat (MDIC)** para o período de *Janeiro de 2016 a Fevereiro de 2022*;
+O objetivo desta análise foi verificar o comportamento das exportações de uva do Brasil em fevereiro de 2022. Os dados utilizados são mensais e disponibilizados pelo **Comexstat (MDIC)** para o período de *Janeiro de 2016 a Fevereiro de 2022*;
 
 Em relação aos volumes, em `r strftime(atual, format = "%B")` foram de 721 toneladas (t). A média histórica (até 2019, antes da pandemia) para este mês é de 234 t. Em `r strftime(atual, format = "%B")` de 2020 foram exportadas 371 t e, em `r strftime(atual, format = "%B")` de 2021, foram 1.165 t, ou seja, houve um aumento de 94,34% em relação a 2020 e uma queda de -38,10% na comparação com o mesmo período de 2021.
 
@@ -324,7 +324,7 @@ ggplotly(g1) %>%
 ```
 Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
 
-Obs: Dados de 2022 apenas para o mês de janeiro.
+Obs: Dados de 2022 apenas para o mês de fevereiro.
 
 <br>
 <br>
@@ -346,7 +346,7 @@ datatable(round(dados1t), option = list(
 ```
 Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
 
-Obs: Dados de 2022 apenas para o mês de janeiro.
+Obs: Dados de 2022 apenas para o mês de fevereiro.
 <br>
 <br>
 
@@ -429,7 +429,7 @@ Fonte: Observatório de Mercado de uva da Embrapa
 <br>
 <br>
 
-## Valor das Exportações de uva do Brasil: Janeiro de 2022 em comparação com as informações entre 2016-2021 {.tabset .tabset-fade}
+## Valor das Exportações de uva do Brasil: Fevereiro de 2022 em comparação com as informações entre 2016-2021 {.tabset .tabset-fade}
 
 <br>
 <br>
@@ -474,7 +474,7 @@ ggplotly(g4) %>%
 
 Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
 
-Obs: Dados de 2022 apenas para o mês de janeiro.
+Obs: Dados de 2022 apenas para o mês de fevereiro.
 
 <br>
 <br>
@@ -494,7 +494,7 @@ datatable(round(table_valor,3), option = list(
 ```
 Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
 
-Obs: Dados de 2022 apenas para o mês de janeiro.
+Obs: Dados de 2022 apenas para o mês de `r strftime(atual, format = "%B")`.
 
 <br>
 <br>
@@ -583,7 +583,7 @@ Fonte: Observatório de Mercado de uva da Embrapa
 <br>
 <br>
 
-## Volume das Exportações de uva do Brasil: Janeiro de 2022 em comparação com as informações entre 2016-2021 {.tabset .tabset-fade}
+## Volume das Exportações de uva do Brasil: `r strftime(atual, format = "%B")` de 2022 em comparação com as informações entre 2016-2021 {.tabset .tabset-fade}
 
 <br>
 <br>
@@ -627,7 +627,7 @@ ggplotly(g7) %>%
 
 Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa.
 
-Obs: Dados de 2022 apenas para o mês de janeiro.
+Obs: Dados de 2022 apenas para o mês de `r strftime(atual, format = "%B")`.
 
 <br>
 <br>
@@ -648,7 +648,7 @@ datatable(round(table_volume,3), option = list(
 
 Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa.
 
-Obs: Dados de 2022 apenas para o mês de janeiro.
+Obs: Dados de 2022 apenas para o mês de `r strftime(atual, format = "%B")`.
 
 <br>
 <br>
@@ -712,7 +712,7 @@ Fonte: Observatório de Mercado de uva da Embrapa
 <br>
 <br>
 
-# 4. Principais destinos de exportação da uva do Brasil: Janeiro de 2022. {.tabset .tabset-fade}
+# 4. Principais destinos de exportação da uva do Brasil: `r strftime(atual, format = "%B")` de 2022. {.tabset .tabset-fade}
 
 <br>
 <br>
@@ -770,7 +770,7 @@ Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
 <br>
 <br>
 
-# 5. Principais vias de exportação da uva do Brasil: Janeiro de 2022. {.tabset .tabset-fade}
+# 5. Principais vias de exportação da uva do Brasil: `r strftime(atual, format = "%B")` de 2022. {.tabset .tabset-fade}
 
 <br>
 <br>
@@ -826,7 +826,7 @@ Fonte: COMEXSTAT reprocessado pelo Observatório de Mercado de uva da Embrapa
 <br>
 <br>
 
-# 6. Unidade da Federação da uva exportada do Brasil: Janeiro de 2022. {.tabset .tabset-fade}
+# 6. Unidade da Federação da uva exportada do Brasil: `r strftime(atual, format = "%B")` de 2022. {.tabset .tabset-fade}
 
 <br>
 <br>
