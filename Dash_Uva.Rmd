@@ -587,8 +587,8 @@ Row {data-height=150}
 num <- tail(preco_vitoria,1)
 valueBox(
   value = paste0( "R$", format(num, decimal.mark =  ",")),
-  color = "tomato",
-  icon= "fa-arrow-down")
+  color = "green",
+  icon= "fa-arrow-up")
 ```
 
 ### Preço de Uva Negra Embalada na Semana `r strftime(data, format = "%V")` de 2021
