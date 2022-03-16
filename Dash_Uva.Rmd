@@ -59,10 +59,10 @@ knitr::opts_chunk$set(
   )
 
 library(lubridate)
-anterior <- as.Date("2021-12-01")
-atual <-  as.Date("2022-01-01")
-data <- as.Date("2022-03-04")
-sem_ano <- 9 #ajustar semanalmente
+anterior <- as.Date("2022-01-01")
+atual <-  as.Date("2022-02-01")
+data <- as.Date("2022-03-11")
+sem_ano <- 10 #ajustar semanalmente
 # Linhas que precisam de ajuste: 71, 104, 107
 ```
 
@@ -1094,10 +1094,10 @@ checkX13()
 options(digits=4)
 
 library(lubridate)
-anterior <- as.Date("2021-12-01")
-atual <-  as.Date("2022-01-01")
+anterior <- as.Date("2022-01-01")
+atual <-  as.Date("2022-02-01")
 today <- as.Date("2022-02-11")
-mes <- 1
+mes <- 2
 
 #Entrando dados no R
 dados1 <- read.csv2('exportacoes_2016_2022.csv', header=T, sep=";", dec = ".")
@@ -1225,7 +1225,7 @@ exporta_uva_volume_2020 <- window(exporta_uva_volume, end=c(2020,12))
 
 exporta_uva_volume_2021 <- window(exporta_uva_volume, end=c(2021,12))
 
-exporta_uva_volume_22 <- as.matrix(tail(exporta_uva_volume,1)) #ajustar mensalmente
+exporta_uva_volume_22 <- as.matrix(tail(exporta_uva_volume,mes)) #ajustar mensalmente
 exporta_uva_volume_2022 <- matrix(NA, nrow=12, ncol=1)
 
 for(i in 1:mes){
@@ -1261,9 +1261,10 @@ tableb2_vol <- melt(tableb_vol, id.var='Meses')
 variacao_volume_2020 <- as.matrix(variacao_volume_20)
 variacao_volume_2021 <- as.matrix(variacao_volume_21)
 variacao_volume_2022 <- matrix(NA, nrow=12, ncol=1)
+variacao_volume_22 <- as.matrix(variacao_volume_22)
 
 for(i in 1:mes){
-  variacao_volume_2022[i,1] = variacao_volume_22
+  variacao_volume_2022[i,1] = variacao_volume_22[i,1]
 }
 
 variacao_21 <- ((variacao_volume_2021/variacao_volume_2020) - 1)*100
@@ -1286,7 +1287,7 @@ Row {data-height=125}
 
 ### Volume Exportação em `r strftime(atual, format = "%B")` de 2022 
 ``` {r d1}
-num <- 1124
+num <- 721
 valueBox(
   value = paste0(num, " Toneladas"),
   color = "green",
@@ -1295,7 +1296,7 @@ valueBox(
 
 ### Volume Exportação em `r strftime(atual, format = "%B")` de 2021 
 ``` {r d2}
-num <- 950
+num <- 1165
 valueBox(
   value = paste0(num, " Toneladas"),
   icon= "fa-pen")
@@ -1303,7 +1304,7 @@ valueBox(
 
 ### Volume Exportação em `r strftime(atual, format = "%B")` de 2020 
 ``` {r d3}
-num <- 842
+num <- 371
 valueBox(
   value = paste0(num, " Toneladas"),
   icon= "fa-pen")
@@ -1478,3 +1479,216 @@ ggplotly(g13) %>%
                       x=0.35, 
                       y=-0.2,
                       title=''))
+```
+
+EMPREGO
+======================================================================
+
+```{r database6}
+#Direcionado o R para o Diretorio a ser trabalhado
+setwd('c:/Users/Joao Ricardo Lima/Dropbox/tempecon/dados_caged')
+
+anterior <- as.Date("2022-01-01")
+atual <-  as.Date("2022-02-01")
+#today <- as.Date("2022-02-11")
+today <- as.Date("2022-03-11")
+
+#Inicio do Script
+#Pacotes a serem utilizados 
+library(ggplot2)
+library(scales)
+library(plotly)
+
+#Entrando dados no R
+dados1 <- read.csv2('janeiro_2022.csv', header=T, sep=";", dec = ".")
+colnames(dados1)[1] <- 'date'
+dados1$date <- seq(as.Date('2021-01-01'),to=anterior,by='1 month')
+
+#Entrando com o restante dos dados
+
+load("janeiro_22_caged.RData")
+
+#dados_01_vsf$sexo <- lapply(dados_01_vsf$sexo, factor)
+
+dados_01_vsf$sexo[dados_01_vsf$sexo == 1] <- 0
+dados_01_vsf$sexo[dados_01_vsf$sexo == 3] <- 1
+
+dados_01_vsf <- mutate(dados_01_vsf,
+                sexo = factor(sexo, levels = 0:1, labels = c("Masculino", "Feminino")))
+
+# Mantendo apenas 
+
+#Separando as admissoes e as demissoes
+dados_01_vsf_positivos <-dados_01_vsf%>% filter(saldo_movim=="1")
+dados_01_vsf_negativos <-dados_01_vsf%>% filter(saldo_movim=="-1")
+
+#Mantendo apenas o agronegocio
+secao_positivos <-dados_01_vsf_positivos%>% filter(secao=="A")
+secao_negativos <-dados_01_vsf_negativos%>% filter(secao=="A")
+
+#Mantendo apenas a uva
+subclasse_positivos <-dados_01_vsf_positivos%>% filter(subclasse=="132600")
+subclasse_negativos <-dados_01_vsf_negativos%>% filter(subclasse=="132600")
+
+subclasse_positivos <- mutate(subclasse_positivos,
+                grau_instrucao = factor(grau_instrucao, levels = 1:13, 
+                                        labels = c("Analfabeto",
+                                                   "Até 5ª Incompleto",
+                                                   "5ª Completo Fundamental",
+                                                   "6ª a 9ª Fundamental",
+                                                   "Fundamental Completo",
+                                                   "Médio Incompleto",
+                                                   "Médio Completo",
+                                                   "Superior Incompleto",
+                                                   "Superior Completo",
+                                                   "Mestrado",
+                                                   "Doutorado",
+                                                   "Pós-Graduação completa",
+                                                   "Não Identificado")))
+```
+
+Row {data-height=125}
+-----------------------------------------------------------------------
+
+### pela viticultura em `r strftime(atual, format = "%B")` de 2022 
+``` {r emp1}
+num <- 2070
+valueBox(
+  value = paste0(num, " Contratados"),
+  color = "green",
+  icon= "fa-arrow-up")
+```
+
+### pela viticultura em `r strftime(atual, format = "%B")` de 2022 
+``` {r emp2}
+num <- 1841
+valueBox(
+  value = paste0(num, " Demitidos"),
+  color = "tomato",
+  icon= "fa-arrow-down")
+```
+
+### Saldo Gerado pela viticultura em `r strftime(atual, format = "%B")` de 2022 
+``` {r emp3}
+num <- 229
+valueBox(
+  value = paste0(num, " Empregos"),
+  color = "tomato",
+  icon= "fa-pen")
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Evolução do saldo de Empregos gerados na viticultura {.no-title}
+
+```{r emp4}
+#Gráfico com Ggplot2
+
+mycolor1 <- "gold"
+
+g1 <- ggplot(data=dados1) +  #estetica vai valer para todos os geom's
+  geom_col(aes(x=date, y=Saldo_uva, fill="Saldo Uva"), lwd=1)+
+    scale_fill_manual(values=mycolor1)+
+    labs(y= "Saldo de Emprego (unidade)", x= "Meses do Ano", title='Evolução do saldo de Empregos gerados na viticultura',
+       caption = "")+
+    scale_y_continuous(limits=c(-2700, 2200), n.breaks = 10, expand = expansion(add=c(0,0.5)))+
+    scale_x_date(date_breaks = "2 month",
+               labels = date_format("%b/%y"))+
+  theme_minimal()+ #Definindo tema
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=10, margin = margin(b=5)),
+        axis.text.y=element_text(hjust=1, size=10, margin = margin(l=20)),
+        axis.title.x = element_text(size=10, face = "bold", margin = margin(b=5)),
+        axis.title.y = element_text(size=10, face = "bold", margin = margin(l=20)),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(hjust = 0.5, size=12),
+        plot.caption = element_text(hjust = 0, size=12),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_blank()) # Definindo posição da legenda
+
+ggplotly(g1) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.45, 
+                      y=-0.25,
+                      title=''))
+```
+
+### Empregos gerados na uva por gênero {.no-title}
+
+``` {r emp5}
+### Histograma
+
+g2 <- ggplot(data = subclasse_positivos, aes(x = sexo, y = ..count..)) +
+  geom_bar(fill='steelblue')+
+    labs(y= "Contratados Uva - VSF", x= "Gênero", title='Distribuição dos empregos gerados por gênero',
+       caption = "")+
+  theme_minimal()+ #Definindo tema
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=10, margin = margin(b=20)),
+        axis.text.y=element_text(hjust=1, size=10, margin = margin(l=20)),
+        axis.title.x = element_text(size=10, face = "bold", margin = margin(b=20)),
+        axis.title.y = element_text(size=10, face = "bold", margin = margin(l=20)),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(hjust = 0.5, size=12),
+        plot.caption = element_text(hjust = 0, size=12),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+
+ggplotly(g2)
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Empregos gerados na uva por idade {.no-title}
+
+``` {r emp6}
+### Histograma
+
+g3 <- ggplot(data=subclasse_positivos, aes(x=idade))+
+  geom_histogram(binwidth=3, fill="#69b3a2", color="#e9ecef", alpha=0.9)+
+    labs(y= "Contratados Uva - VSF", x= "Idades", title='Distribuição dos empregos gerados por idade',
+       caption = "")+
+  theme_minimal() +
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=10, margin = margin(b=20)),
+        axis.text.y=element_text(hjust=1, size=10, margin = margin(l=20)),
+        axis.title.x = element_text(size=10, face = "bold", margin = margin(b=20)),
+        axis.title.y = element_text(size=10, face = "bold", margin = margin(l=20)),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(hjust = 0.5, size=12),
+        plot.caption = element_text(hjust = 0, size=12),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+  
+ggplotly(g3)
+``` 
+
+
+### Empregos gerados na uva por grau de instrução {.no-title}
+
+``` {r emp7}
+### Histograma
+
+g4 <- ggplot(data = subclasse_positivos, aes(x = grau_instrucao, y = ..count..)) +
+  geom_bar(fill='#1e4971')+
+    scale_y_continuous(limits=c(0, 900), n.breaks = 10, expand = expansion(add=c(0,0.5)))+
+labs(y= "Contratados Uva - VSF", x= "Grau de Instrução", title='Grau de Instrução dos empregos gerados',
+       caption = "")+
+  theme_minimal() +
+  theme(axis.text.x=element_text(angle=30, hjust=1, size=10, margin = margin(b=20)),
+        axis.text.y=element_text(hjust=1, size=10, margin = margin(l=20)),
+        axis.title.x = element_text(size=10, face = "bold", margin = margin(b=20)),
+        axis.title.y = element_text(size=10, face = "bold", margin = margin(l=20)),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(hjust = 0.5, size=12),
+        plot.caption = element_text(hjust = 0, size=12),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+  
+ggplotly(g4)
+```
+
