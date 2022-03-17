@@ -63,12 +63,11 @@ anterior <- as.Date("2022-01-01")
 atual <-  as.Date("2022-02-01")
 data <- as.Date("2022-03-11")
 sem_ano <- 10 #ajustar semanalmente
+mes <- 2
 # Linhas que precisam de ajuste: 71, 104, 107
 ```
 
 DADOS GERAIS
-======================================================================
-
 ======================================================================
 ```{r database5}
 #Direcionado o R para o Diretorio a ser trabalhado
@@ -77,6 +76,7 @@ setwd('c:/Users/Joao Ricardo Lima/Dropbox/tempecon/dados_uva')
 options(digits=4)
 today <- as.Date("2022-01-01")
 date <- seq(as.Date('2021-01-01'),to=as.Date('2021-12-01'),by='1 month')
+date2 <- seq(as.Date('2021-01-01'),to=as.Date('2021-12-01'),by='1 month')
 
 #Entrando dados no R
 dados <- read_excel("uva_ibge2020.xlsx", col_names = TRUE)
@@ -1478,6 +1478,385 @@ ggplotly(g13) %>%
                       orientation = "h", 
                       x=0.35, 
                       y=-0.2,
+                      title=''))
+```
+
+MERCADO INTERNO
+======================================================================
+
+```{r database4}
+#Direcionado o R para o Diretorio a ser trabalhado
+setwd('c:/Users/Joao Ricardo Lima/Dropbox/tempecon/dados_uva')
+
+#Inicio do Script
+#Pacotes a serem utilizados
+library(mFilter)
+library(forecast)
+library(tsutils)
+library(seasonal)
+library(ggplot2)
+library(uroot)
+library(tseries)
+library(ggthemes)
+library(dplyr)
+library(tidyverse)
+library(quantmod)
+library(scales)
+library(kableExtra)# complex tables
+library(lmtest)
+library(FinTS)
+library(magrittr)# pipe operations
+library(readxl)
+library(reshape2)
+library(plotly)
+library(DT)
+
+checkX13()
+
+options(digits=4)
+
+#Dados de uva por estados
+
+dados3 <- read_excel("ceasas_mi_total22.xlsx", col_names = FALSE)
+dados3 <- dados3[,-1]
+
+#Transpor a base de dados
+dados3 <- as.data.frame(t(dados3))
+colnames(dados3) <-c ('ano','produto','unidade','quilos')
+dados3 <- dados3 %>%
+  mutate(quilos=as.numeric(quilos))
+
+#Total de uvas em todos os CEASAS todas as UF
+
+uva_anual_all <- dados3 
+uva_anual_all$todas_UF <- (uva_anual_all$quilos)/1000 #transformando em Toneladas
+uva_anual_all <- uva_anual_all[,-2]
+
+#Total de uvas em todos os CEASAS PE + BA
+
+dados4 <- read_excel("ceasas_mi_peba22.xlsx", col_names = FALSE)
+dados4 <- dados4[,-1]
+dados4 <- as.data.frame(t(dados4))
+colnames(dados4) <-c ('ano','produto','origem','unidade','quilos')
+
+dados4 <- dados4 %>%
+  mutate(quilos=as.numeric(quilos))
+
+uva_anual_pe <- dados4 %>% filter(origem=='PE')
+uva_anual_ba <- dados4 %>% filter(origem=='BA')
+
+uva_total_peba <- tibble(uva_anual_pe$quilos + uva_anual_ba$quilos)
+uva_total_peba <- uva_total_peba/1000 #passando o volume para toneladas
+colnames(uva_total_peba)[1]<-'pe+ba'
+
+#Juntando as bases de dados Total e PEBA
+uva_anual_all <- tibble(uva_anual_all, uva_total_peba)
+uva_anual_all$ano <- seq(as.Date('2017-01-01'),to=today,by='1 year')
+uva_anual_all <- uva_anual_all[,-c(2:3)]
+uva_anual_allm <- melt(uva_anual_all, id.var='ano')
+
+# Variação da oferta
+
+dados5 <- read_excel("ceasas_mi_peba_mensal22.xlsx", col_names = FALSE)
+dados5 <- dados5[,-1]
+
+#Transpor a base de dados
+dados5 <- as.data.frame(t(dados5))
+colnames(dados5) <-c ('ano','produto','mes','origem','unidade','quilos')
+dados5 <- dados5 %>%
+  mutate(quilos=as.numeric(quilos))
+
+# Geração da variável Tommy
+uva_mespe <-  dados5 %>%
+  filter(origem == "PE")
+
+uva_mesba <-  dados5 %>%
+  filter(origem == "BA")
+
+uva_mespeba <- tibble((uva_mespe$quilos + uva_mesba$quilos)/1000)
+uva_mespeba$mes <- seq(as.Date('2017-01-01'),to=atual,by='1 month')
+uva_mespeba$ano <- uva_mespe$ano
+colnames(uva_mespeba)[1] <-'toneladas'
+
+totalpeba_20 <- uva_mespeba %>% filter(ano=='2020')
+totalpeba_21 <- uva_mespeba %>% filter(ano=='2021')
+totalpeba_22 <- uva_mespeba %>% filter(ano=='2022')
+
+totalpeba_var20 <- as.matrix(totalpeba_20$toneladas)
+totalpeba_var21 <- as.matrix(totalpeba_21$toneladas)
+totalpeba_var22 <- matrix(NA, nrow=12, ncol=1)
+totalpeba_var222 <-  as.matrix(totalpeba_22$toneladas)
+
+#Calculo das variações
+variacaopeba_2120 <- ((totalpeba_var21/totalpeba_var20)-1)*100
+
+# Para 2022 comparando com 2021
+for(i in 1:mes){
+  totalpeba_var22[i,1] = totalpeba_var222[i,1]
+}
+
+variacaopeba_2221 <- ((totalpeba_var22/totalpeba_var21)-1)*100
+
+#meses <- seq(1:12)
+variacao_totalpeba <- data.frame(date2, variacaopeba_2120, variacaopeba_2221)
+colnames(variacao_totalpeba) = c('Meses', 'Ano 2021', 'Ano 2022')
+
+variacao_totalpebat <- melt(variacao_totalpeba, id.var='Meses')
+
+#Tendencia PEBA
+uva_mespeba2 <- ts(uva_mespeba$toneladas, start = c(2017,1), freq=12)
+trend_peba <- cmav(uva_mespeba2, outplot=F)
+
+#Sazonalidade PEBA
+decompa_peba<-decompose(uva_mespeba2, type = 'multiplicative')
+sazonal_peba <- decompa_peba$figure
+meses <- seq(as.Date("2021/1/1"), by = "month", length.out = 12)
+sazonalpeba_graph <- tibble(meses, sazonal_peba)
+
+
+#Comparações com os anos e entre as médias/max/min
+
+peba_2019 <- window(uva_mespeba2, end=c(2019,12))
+seaspeba_19<-seasplot(peba_2019, trend=F, outplot = F)
+mediaspeba_19 <- colMeans(seaspeba_19$season)
+
+peba_2020 <- window(uva_mespeba2, end=c(2020,12))
+
+peba_2021 <- window(uva_mespeba2, end=c(2021,12))
+#seas21<-seasplot(preco_palmer_2021, trend=F, outplot = F)
+#medias21 <- colMeans(seas21$season)
+
+peba_22 <- as.matrix(tail(uva_mespeba2,mes)) #ajustar mensalmente
+peba_2022 <- matrix(NA, nrow=12, ncol=1)
+
+for(i in 1:mes){
+  peba_2022[i,1] = peba_22[i,1]
+}
+
+#Como só se tem até a semana 12
+mediaspeba_19 <- mediaspeba_19[1:12]
+
+matrixpeba = matrix(NA, nrow=12, ncol=2)
+
+for(i in 1:12){
+  matrixpeba[i,1] = min(seaspeba_19$season[,i])
+  matrixpeba[i,2] = max(seaspeba_19$season[,i])
+}
+
+#time <- c("Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", #"Dezembro")
+#time <-seq(1:12)
+table_peba <- data.frame(meses, matrixpeba[,1], round(mediaspeba_19,1), matrixpeba[,2],
+                         round(tail(peba_2020,12),1),
+                    round(tail(peba_2021,12),1), peba_2022[,1])
+colnames(table_peba) = c('Meses', 'Mínimo', 'Média', 'Máximo', '2020', '2021',
+                    '2022')
+
+tablepeba_a <- table_peba[,-c(5:7)]
+tablepeba_b <- table_peba[,-c(2,3,4)]
+
+tablepeba_a2 <- melt(tablepeba_a, id.var='Meses')
+tablepeba_b2 <- melt(tablepeba_b, id.var='Meses')
+mycolors <- c("lightblue3", "gray44", "gold")
+mycolor1 <- "gold"
+mycolors2 <- c("orange", "lightblue3")
+```
+
+Row {data-height=125}
+-----------------------------------------------------------------------
+
+### Volume Comercializado (CEASAS) em `r strftime(atual, format = "%B")` de 2022 
+``` {r v1}
+num <- 4137.5
+valueBox(
+  value = paste0(num, " Toneladas"),
+  color = "tomato",
+  icon= "fa-arrow-down")
+```
+
+### Volume Comercializado (CEASAS) em `r strftime(atual, format = "%B")` de 2021 
+``` {r v2}
+num <- 5046.2
+valueBox(
+  value = paste0(num, " Toneladas"),
+  icon= "fa-pen")
+```
+
+### Volume Comercializado (CEASAS) em `r strftime(atual, format = "%B")` de 2020 
+``` {r v3}
+num <- 4261.9
+valueBox(
+  value = paste0(num, " Toneladas"),
+  icon= "fa-pen")
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Volume total comercializado de uva: 2017 a 2022 {.no-title}
+
+```{r mi1}
+## Gráfico Total de uvas e uvas PE+BA
+
+g1 <- ggplot()+
+  geom_col(data=uva_anual_allm, aes(x=ano, y=value, fill=variable), lwd=1, position = "dodge")+
+  scale_fill_manual(values=mycolors2)+
+  scale_y_continuous(limits = c(0, 150000), n.breaks = 10)+
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y"))+
+  labs(y= "Toneladas", x= "Anos", title='',
+       caption = "Fonte: PROHORT/CONAB reprocessado pelo Observatório de Mercado de uva da Embrapa")+
+  theme_minimal()+
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=14, margin = margin(b=20)),
+        axis.text.y=element_text(hjust=0.5, size=14, margin = margin(l=20)),
+        axis.title.y = element_text(size=16, face = "bold"),
+        axis.title.x = element_text(size=16, face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.caption = element_text(hjust = 0, size=14),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+
+ggplotly(g1) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.30, 
+                      y=-0.30,
+                      title=''))
+```
+
+### Tendência do Volume comercializado de uva {.no-title}
+
+```{r mi3}
+#Gráfico com Ggplot2 - Tendencia
+
+g3 <- ggplot(data=uva_mespeba, aes(x=mes)) +  #estetica vai valer para todos os geom's
+  geom_line(aes(y=toneladas, colour="TONELADAS"), lwd=1)+
+  geom_line(aes(y=trend_peba, colour="TENDÊNCIA"), lwd=1)+
+  scale_colour_manual("",
+                      breaks = c("TONELADAS", "TENDÊNCIA"),
+                      values = c("blue", "red")) +
+  labs(y= "Quantidade (T)", x= "Meses do Ano", title='',
+       caption = "Fonte: CONAB reprocessado pelo Observatório de Mercado de uva da Embrapa")+
+  scale_y_continuous(limits=c(0,12000), n.breaks = 10, expand = expansion(add=c(0,0.5)))+
+  scale_x_date(date_breaks = "1 year",
+               labels = date_format("%Y"))+
+  theme_classic()+ #Definindo tema
+  theme(axis.text.x=element_text(angle=35, hjust=0.5, size=14, margin = margin(b=10)),
+        axis.text.y=element_text(hjust=1, size=14, margin = margin(l=20)),
+        axis.title.x = element_text(size=16, face = "bold", margin = margin(b=0)),
+        axis.title.y = element_text(size=16, face = "bold", margin = margin(l=20)),
+        plot.title = element_text(hjust = 0.5, size=16, face="italic"),
+        plot.caption = element_text(hjust = 0, size=12),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+
+ggplotly(g3) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.30, 
+                      y=-0.30,
+                      title=''))
+```
+
+### Sazonalidade do Volume comercializado de uva {.no-title}
+
+```{r mi4}
+# Gráfico da Sazonalidade
+
+g4 <- ggplot(data=sazonalpeba_graph)+
+  geom_line(aes(x=meses, y=sazonal_peba), color="blue", size=1.5)+
+  scale_y_continuous(limits=c(0,1.5), n.breaks = 5, expand = expansion(add=c(0,0.5)),
+                     labels=number_format(accuracy = 0.1)) +
+  scale_x_date(date_breaks = "1 month",
+               labels = date_format("%b"))+
+  labs(y= "", x= "Meses de cada Ano", title='',
+       caption = "Observatório de Mercado de uva da Embrapa")+
+  theme_minimal()+
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=14, margin = margin(b=20)),
+        axis.text.y=element_text(hjust=0.5, size=14, margin = margin(l=20)),
+        axis.title.y = element_text(size=14, face = "bold"),
+        axis.title.x = element_text(size=14, face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.caption = element_text(hjust = 0, size=14),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+
+ggplotly(g4) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.30, 
+                      y=-0.25,
+                      title=''))
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Estatísticas sobre a Evolução da Oferta de uva {.no-title}
+
+```{r mi5}
+#Evolução da Oferta Mensal de uva PEBA nos CEASAS do Brasil
+
+g5 <- ggplot()+
+  geom_col(data=tablepeba_b2, aes(x=Meses, y=value, fill=variable), lwd=1,
+           position = "dodge")+
+  scale_fill_manual(values=mycolors)+
+  geom_line(data=tablepeba_a2, aes(x=Meses, y=value, colour=variable), linetype = "solid",
+            size = 1)+
+  scale_colour_manual(values = c("red", "chocolate", "darkgreen")) +
+  scale_y_continuous(limits = c(0, 12000), n.breaks = 10)+
+  scale_x_date(date_breaks = "1 month",
+               labels = date_format("%B"))+
+  labs(y= "Toneladas", x= "Meses do Ano", title='',
+       caption = "")+
+  theme_minimal()+
+  theme(axis.text.x=element_text(angle=35, hjust=0.5, size=12, margin = margin(b=20)),
+        axis.text.y=element_text(hjust=0.5, size=14, margin = margin(l=20)),
+        axis.title.y = element_text(size=14, face = "bold"),
+        axis.title.x = element_text(size=14, face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.caption = element_text(hjust = 0, size=14),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=11)) # Definindo posição da legenda
+
+ggplotly(g5) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.05, 
+                      y=-0.35,
+                      title=''))
+```
+
+### Variação do Volume comercializado de uva: 2017 a 2022 {.no-title}
+
+```{r mi2}
+#Variação Volume PE+BA
+
+g2 <- ggplot()+
+  geom_col(data=variacao_totalpebat, aes(x=Meses, y=value, fill=variable), lwd=1, position = "dodge")+
+  scale_fill_manual(values=mycolors2)+
+  scale_y_continuous(limits = c(-20, 100), n.breaks = 10)+
+  scale_x_date(date_breaks = "1 month",
+               labels = date_format("%B"))+
+  labs(y= "Variação Percentual (%)", x= "Meses do Ano", title='',
+       caption = "Fonte: Observatório de Mercado de uva da Embrapa")+
+  theme_minimal()+
+  theme(axis.text.x=element_text(angle=35, hjust=0.5, size=14, margin = margin(b=20)),
+        axis.text.y=element_text(hjust=0.5, size=14, margin = margin(l=20)),
+        axis.title.y = element_text(size=16, face = "bold"),
+        axis.title.x = element_text(size=16, face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.caption = element_text(hjust = 0, size=14),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+
+ggplotly(g2) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.35, 
+                      y=-0.30,
                       title=''))
 ```
 
