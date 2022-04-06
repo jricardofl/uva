@@ -67,8 +67,9 @@ mes <- 2
 # Linhas que precisam de ajuste: 71, 104, 107
 ```
 
-DADOS GERAIS
+BRASIL {data-navmenu="DADOS GERAIS"}
 ======================================================================
+
 ```{r database5}
 #Direcionado o R para o Diretorio a ser trabalhado
 setwd('c:/Users/Joao Ricardo Lima/Dropbox/tempecon/dados_uva')
@@ -113,7 +114,163 @@ valueBox(
 
 ### Volume com Uva produzida no Brasil em 2020 
 ``` {r}
-num <- 700.2
+num <- 700.3
+valueBox(
+  value = paste0(format(num, decimal.mark =  ","), " Mil Toneladas" ),
+#  color = "lightblue3",
+  icon= "fa-pen")
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Evolução da Area com uva no Brasil: 2016:2020 {.no-title}
+
+```{r ibge1}
+g1 <- dados %>% 
+  filter(abrangencia=='brasil') %>% 
+  ggplot() + #estetica vai valer para todos os geom's
+  geom_col(aes(x=ano, y=area, fill="Area uva (Hectares)"), lwd=1)+
+  scale_fill_manual(values=mycolor1)+
+  labs(y= "Hectares", x= "Anos", title='Evolução da Area com Uva no Brasil: 2016-2020',
+       caption = "Fonte: IBGE (2021)") +
+  scale_y_continuous(limits=c(0, 30000), n.breaks = 6, expand = expansion(add=c(0,0.5)))+
+  theme_classic()+ #Definindo tema
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=12, margin = margin(b=5)),
+        axis.text.y=element_text(hjust=1, size=12, margin = margin(l=20)),
+        axis.title.x = element_text(size=12, face = "bold", margin = margin(b=0)),
+        axis.title.y = element_text(size=12, face = "bold", margin = margin(l=20)),
+        plot.title = element_text(hjust = 0.5, size=14),
+        plot.caption = element_text(hjust = 0, size=8),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+
+ggplotly(g1) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.35, 
+                      y=-0.40,
+                      title=''))
+```
+
+### Evolução do Volume com uva no Brasil: 2016-2020 {.no-title}
+
+```{r ibge2}
+g2 <- dados %>% 
+  filter(abrangencia=='brasil') %>% 
+  ggplot() + #estetica vai valer para todos os geom's
+  geom_col(aes(x=ano, y=quantidade/1000, fill="Volume (Mil Toneladas)"), lwd=1)+
+  scale_fill_manual(values=mycolor2)+
+  labs(y= "Mil Toneladas", x= "Anos", title='Evolução do Volume de Uva no Brasil: 2016-2020',
+       caption = "Fonte: IBGE (2021)") +
+  scale_y_continuous(limits=c(0, 900), n.breaks = 6, expand = expansion(add=c(0,0.5)))+
+  theme_classic()+ #Definindo tema
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=12, margin = margin(b=5)),
+        axis.text.y=element_text(hjust=1, size=12, margin = margin(l=20)),
+        axis.title.x = element_text(size=12, face = "bold", margin = margin(b=0)),
+        axis.title.y = element_text(size=12, face = "bold", margin = margin(l=20)),
+        plot.title = element_text(hjust = 0.5, size=14),
+        plot.caption = element_text(hjust = 0, size=8),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+
+ggplotly(g2) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.35, 
+                      y=-0.40,
+                      title=''))
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Evolução da Produtividade com uva no Brasil: 2016-2020 {.no-title}
+
+```{r ibge3}
+g3 <- dados %>% 
+  filter(abrangencia=='brasil') %>% 
+  ggplot() + #estetica vai valer para todos os geom's
+  geom_col(aes(x=ano, y=produtividade, fill="Produtividade (Toneladas/Hectares)"), lwd=1)+
+  scale_fill_manual(values=mycolor3)+
+  labs(y= "Produtividade (Ton/Ha)", x= "Anos", title='Evolução da Produtividade da Uva no Brasil: 2016-2020',
+       caption = "IBGE (2021)") +
+  scale_y_continuous(limits=c(0, 30), n.breaks = 5, expand = expansion(add=c(0,0.5)))+
+  theme_classic()+ #Definindo tema
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=12, margin = margin(b=5)),
+        axis.text.y=element_text(hjust=1, size=12, margin = margin(l=20)),
+        axis.title.x = element_text(size=12, face = "bold", margin = margin(b=0)),
+        axis.title.y = element_text(size=12, face = "bold", margin = margin(l=20)),
+        plot.title = element_text(hjust = 0.5, size=14),
+        plot.caption = element_text(hjust = 0, size=8),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+
+ggplotly(g3) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.35, 
+                      y=-0.40,
+                      title=''))
+```
+
+### Evolução do Valor Bruto da Produção com uva no Brasil: 2016-2020  {.no-title}
+
+```{r ibge4}
+g4 <- dados %>% 
+  filter(abrangencia=='brasil') %>% 
+  ggplot() + #estetica vai valer para todos os geom's
+  geom_col(aes(x=ano, y=vbp/1000, fill="Valor Bruto Produção (Mil R$)"), lwd=1)+
+  scale_fill_manual(values=mycolor4)+
+  labs(y= "VBP (Mil R$)", x= "Anos", title='Evolução do Valor Bruto da Produção da Uva no Brasil: 2016-2020',
+       caption = "IBGE (2021)") +
+  scale_y_continuous(limits=c(0, 2600), n.breaks = 5, expand = expansion(add=c(0,0.5)))+
+  theme_classic()+ #Definindo tema
+  theme(axis.text.x=element_text(angle=0, hjust=0.5, size=12, margin = margin(b=5)),
+        axis.text.y=element_text(hjust=1, size=12, margin = margin(l=20)),
+        axis.title.x = element_text(size=12, face = "bold", margin = margin(b=0)),
+        axis.title.y = element_text(size=12, face = "bold", margin = margin(l=20)),
+        plot.title = element_text(hjust = 0.5, size=14),
+        plot.caption = element_text(hjust = 0, size=8),
+        legend.position = "bottom", legend.title = element_blank(),
+        legend.text=element_text(size=12)) # Definindo posição da legenda
+
+ggplotly(g4) %>%
+  layout(legend = list(
+                      orientation = "h", 
+                      x=0.35, 
+                      y=-0.40,
+                      title=''))
+```
+
+
+VALE DO S. FRANCISCO {data-navmenu="DADOS GERAIS"}
+======================================================================
+
+Row {data-height=150}
+-----------------------------------------------------------------------
+
+### Área Plantada com Uva no Vale S. Francisco em 2020 
+``` {r}
+num <- 10.113 
+valueBox(
+  value = paste0(num, " Hectares"),
+#  color = "lightblue3",
+  icon= "fa-pen")
+```
+
+### Produtividade média da Uva no Vale S. Francisco em 2020 
+``` {r}
+num <- 38
+valueBox(
+  value = paste0( num, " Toneladas/Hectare"),
+#  color = "lightblue3",
+  icon= "fa-pen")
+```
+
+### Volume com Uva produzida no Vale S. Francisco em 2020 
+``` {r}
+num <- 388.3
 valueBox(
   value = paste0(format(num, decimal.mark =  ","), " Mil Toneladas" ),
 #  color = "lightblue3",
@@ -125,7 +282,7 @@ Row
 
 ### Evolução da Area com uva no Vale do São Francisco: 2016:2020 {.no-title}
 
-```{r ibge1}
+```{r ibge1b}
 g1 <- ggplot(data=dados) +  #estetica vai valer para todos os geom's
   geom_col(aes(x=ano, y=area, fill="Area uva (Hectares)"), lwd=1)+
   scale_fill_manual(values=mycolor1)+
@@ -152,7 +309,7 @@ ggplotly(g1) %>%
 
 ### Evolução do Volume com uva no Vale do São Francisco: 2016-2020 {.no-title}
 
-```{r ibge2}
+```{r ibge2b}
 g2 <- ggplot(data=dados) +  #estetica vai valer para todos os geom's
   geom_col(aes(x=ano, y=quantidade/1000, fill="Volume (Mil Toneladas)"), lwd=1)+
   scale_fill_manual(values=mycolor2)+
@@ -182,7 +339,7 @@ Row
 
 ### Evolução da Produtividade com uva no Vale do São Francisco: 2016-2020 {.no-title}
 
-```{r ibge3}
+```{r ibge3b}
 g3 <- ggplot(data=dados) +  #estetica vai valer para todos os geom's
   geom_col(aes(x=ano, y=produtividade, fill="Produtividade (Toneladas/Hectares)"), lwd=1)+
   scale_fill_manual(values=mycolor3)+
@@ -209,7 +366,7 @@ ggplotly(g3) %>%
 
 ### Evolução do Valor Bruto da Produção com uva no Vale do São Francisco: 2016-2020  {.no-title}
 
-```{r ibge4}
+```{r ibge4b}
 g4 <- ggplot(data=dados) +  #estetica vai valer para todos os geom's
   geom_col(aes(x=ano, y=vbp/1000, fill="Valor Bruto Produção (Mil R$)"), lwd=1)+
   scale_fill_manual(values=mycolor4)+
