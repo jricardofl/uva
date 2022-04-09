@@ -435,7 +435,7 @@ g5 <- ggplot(data=vitoria, aes(x=date)) +  #estetica vai valer para todos os geo
                       values = c("blue", "red")) +
   labs(y= "Preço R$", x= "Semanas de cada Ano", title='',
        caption = "Fonte: CEPEA reprocessado pelo Observatório de Mercado de Uva da Embrapa") +
-  scale_y_continuous(limits=c(0,18), n.breaks = 10, expand = expansion(add=c(0,0.5)), 
+  scale_y_continuous(limits=c(0,20), n.breaks = 10, expand = expansion(add=c(0,0.5)), 
                      labels=number_format(accuracy = 0.01, decimal.mark = ","))+
   scale_x_date(date_breaks = "1 year",
                labels = date_format("%Y"))+
