@@ -59,11 +59,11 @@ knitr::opts_chunk$set(
   )
 
 library(lubridate)
-anterior <- as.Date("2022-01-01")
-atual <-  as.Date("2022-02-01")
-data <- as.Date("2022-04-01")
-sem_ano <- 13 #ajustar semanalmente
-mes <- 2
+anterior <- as.Date("2022-02-01")
+atual <-  as.Date("2022-03-01")
+data <- as.Date("2022-04-08")
+sem_ano <- 14 #ajustar semanalmente
+mes <- 3
 # Linhas que precisam de ajuste: 71, 104, 107
 ```
 
@@ -571,7 +571,7 @@ valueBox(
 
 ### Preço de Uva Branca Embalada na Semana `r strftime(data, format = "%V")` de 2021
 ``` {r}
-num <- 10.24
+num <- 8.39
 valueBox(
   value = paste0( "R$", format(num, decimal.mark =  ",")),
   icon= "fa-pen")
@@ -579,7 +579,7 @@ valueBox(
 
 ### Preço de Uva Branca Embalada na Semana `r strftime(data, format = "%V")` de 2020
 ``` {r}
-num <-11.92
+num <-10.94
 valueBox(
   value = paste0( "R$", format(num, decimal.mark =  ",")),
   icon= "fa-pen")
@@ -750,7 +750,7 @@ valueBox(
 
 ### Preço de Uva Negra Embalada na Semana `r strftime(data, format = "%V")` de 2021
 ``` {r}
-num <- 8.22
+num <- 8.17
 valueBox(
   value = paste0( "R$", format(num, decimal.mark =  ",")),
   icon= "fa-pen")
@@ -758,7 +758,7 @@ valueBox(
 
 ### Preço de Uva Negra Embalada na Semana `r strftime(data, format = "%V")` de 2020
 ``` {r}
-num <-12.21
+num <-11.94
 valueBox(
   value = paste0( "R$", format(num, decimal.mark =  ",")),
   icon= "fa-pen")
@@ -822,7 +822,7 @@ g5 <- ggplot()+
     geom_line(data=tablea2, aes(x=Semanas, y=value, colour=variable), linetype = "solid",
             size = 1)+
   scale_colour_manual(values = c("red", "chocolate", "darkgreen")) +
-  scale_y_continuous(limits = c(0, 18), n.breaks = 10, labels = number_format(accuracy = 0.01,
+  scale_y_continuous(limits = c(0, 20), n.breaks = 10, labels = number_format(accuracy = 0.01,
                                                        decimal.mark = ","))+
   scale_x_continuous(breaks = seq(1, 52, by = 2))+
   labs(y= "Preço R$", x= "Semanas de cada Ano", title='Mínimo, Máximo, Média e preços de 2020 a 2022 de Uva Negra Embalada',
@@ -913,7 +913,7 @@ g7 <- ggplot(data=vitoria, aes(x=date)) +  #estetica vai valer para todos os geo
                       values = c("black", "tomato")) +
   labs(y= "Preço R$", x= "Semanas de cada Ano", title='Evolução dos preços ao produtor e Tendência Uva Negra Embalada',
        caption = "Fonte: CEPEA reprocessado pelo Observatório de Mercado de Uva da Embrapa") +
-  scale_y_continuous(limits=c(0,18), n.breaks = 10, expand = expansion(add=c(0,0.5)), 
+  scale_y_continuous(limits=c(0,20), n.breaks = 10, expand = expansion(add=c(0,0.5)), 
                      labels=number_format(accuracy = 0.01, decimal.mark = ","))+
   scale_x_date(date_breaks = "1 year",
                labels = date_format("%Y"))+
@@ -991,7 +991,7 @@ valueBox(
 
 ### Preço de Uva Negra na Semana `r strftime(data, format = "%V")` de 2021
 ``` {r}
-num <- 4.61
+num <- 4.64
 valueBox(
   value = paste0( "R$", format(num, decimal.mark =  ",")),
   icon= "fa-pen")
@@ -999,7 +999,7 @@ valueBox(
 
 ### Preço de Uva Negra na Semana `r strftime(data, format = "%V")` de 2020
 ``` {r}
-num <-6.64
+num <-6.94
 valueBox(
   value = paste0( "R$", format(num, decimal.mark =  ",")),
   icon= "fa-pen")
@@ -1251,10 +1251,10 @@ checkX13()
 options(digits=4)
 
 library(lubridate)
-anterior <- as.Date("2022-01-01")
-atual <-  as.Date("2022-02-01")
-today <- as.Date("2022-02-11")
-mes <- 2
+anterior <- as.Date("2022-02-01")
+atual <-  as.Date("2022-03-01")
+#today <- as.Date("2022-02-11")
+mes <- 3
 
 #Entrando dados no R
 dados1 <- read.csv2('exportacoes_2016_2022.csv', header=T, sep=";", dec = ".")
@@ -1444,16 +1444,16 @@ Row {data-height=125}
 
 ### Volume Exportação em `r strftime(atual, format = "%B")` de 2022 
 ``` {r d1}
-num <- 721
+num <- 603
 valueBox(
   value = paste0(num, " Toneladas"),
-  color = "green",
-  icon= "fa-arrow-up")
+  color = "tomato",
+  icon= "fa-arrow-down")
 ```
 
 ### Volume Exportação em `r strftime(atual, format = "%B")` de 2021 
 ``` {r d2}
-num <- 1165
+num <- 3789
 valueBox(
   value = paste0(num, " Toneladas"),
   icon= "fa-pen")
@@ -1461,7 +1461,7 @@ valueBox(
 
 ### Volume Exportação em `r strftime(atual, format = "%B")` de 2020 
 ``` {r d3}
-num <- 371
+num <- 1668
 valueBox(
   value = paste0(num, " Toneladas"),
   icon= "fa-pen")
@@ -1673,6 +1673,8 @@ checkX13()
 options(digits=4)
 
 today <- as.Date("2022-02-11")
+atual <-  as.Date("2022-02-01")
+mes <- 2
 
 #Dados de uva por estados
 
